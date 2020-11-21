@@ -4,6 +4,9 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+pymongo = "==3.11.0"
+pydantic = "==1.7.2"
+fastapi = "==0.61.2"
 
 [dev-packages]
 
