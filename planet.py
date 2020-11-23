@@ -2,10 +2,10 @@ from pydantic import BaseModel
 from typing import Optional
 import requests
 import json
-from mongo import Mongo
+from db import Db
 
-mongo = Mongo()
-planets = mongo.get_collection()
+db = Db()
+planets = db.get_collection()
 
 
 class Planet(BaseModel):
@@ -29,7 +29,11 @@ class Planet(BaseModel):
             'terrain': self.terrain,
             'films_no': self.films_no
         }
-        planets.insert_one(planet)
+        try:
+            planets.insert_one(planet)
+            return {"status": 200, "response": planet}
+        except:
+            return {"status": 500, "message": "Internal server error"}
 
     @staticmethod
     def get(id, name):
@@ -38,14 +42,21 @@ class Planet(BaseModel):
             query.update({"_id": id})
         if name is not None:
             query.update({"name": name})
-        return [planet for planet in planets.find(query)]
+        try:
+            response = [planet for planet in planets.find(query)]
+            return {"status": 200, "response": response}
+        except:
+            return {"status": 500, "message": "Internal server error"}
 
-    @staticmethod
-    def get_id():
-        return len([planet for planet in planets.find({})]) + 1
+    def get_id(self):
+        atual_id = max(planet['_id'] for planet in planets.find({}))
+        return atual_id + 1
 
     @staticmethod
     def delete(id):
         query = {"_id": id}
-        planets.delete_one(query)
-        return {"status": 200}
+        try:
+            planets.delete_one(query)
+            return {"status": 200, "message": "Delete success"}
+        except:
+            return {"status": 500, "message": "Internal server error"}

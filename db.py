@@ -1,9 +1,8 @@
-from fastapi import params
 from pymongo import MongoClient
 import json
 
 
-class Mongo():
+class Db():
     def __init__(self):
         self.credentials = self.__get_credentials()
         self.client = self.__connect()
