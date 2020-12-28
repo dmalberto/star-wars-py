@@ -6,8 +6,6 @@ app = FastAPI()
 
 @app.post("/planets")
 async def add_planet(planet: Planet):
-    planet.id = planet.get_id()
-    planet.films_no = planet.get_films_no()
     return planet.insert()
 
 

@@ -15,7 +15,7 @@ class Planet(BaseModel):
     terrain: str
     films_no: Optional[int]
 
-    def get_films_no(self):
+    def __get_films_no(self):
         try:
             content = requests.get(
                 f"https://swapi.dev/api/planets/?search={self.name}").content
@@ -25,7 +25,17 @@ class Planet(BaseModel):
         except:
             return 0
 
+    def __get_id(self):
+        try:
+            atual_id = max(planet['_id'] for planet in planets.find({}))
+        except:
+            atual_id = 0
+        finally:
+            return atual_id + 1
+
     def insert(self):
+        self.id = self.__get_id()
+        self.films_no = self.__get_films_no()
         planet = {
             '_id': self.id,
             'name': self.name,
@@ -37,7 +47,7 @@ class Planet(BaseModel):
             planets.insert_one(planet)
             return {"status": 200, "response": planet}
         except:
-            return {"status": 500, "message": "Internal server error"}
+            return {"status": 500, "response": "Internal server error"}
 
     @staticmethod
     def get(id, name):
@@ -50,28 +60,21 @@ class Planet(BaseModel):
             response = [planet for planet in planets.find(query)]
             return {"status": 200, "response": response}
         except:
-            return {"status": 500, "message": "Internal server error"}
-
-    def get_id(self):
-        try:
-            atual_id = max(planet['_id'] for planet in planets.find({}))
-        except:
-            atual_id = 0
-        return atual_id + 1
+            return {"status": 500, "response": "Internal server error"}
 
     @staticmethod
     def delete(id):
         query = {"_id": id}
         try:
             planets.delete_one(query)
-            return {"status": 200, "message": "Delete success"}
+            return {"status": 200, "response": "Delete success"}
         except:
-            return {"status": 500, "message": "Internal server error"}
+            return {"status": 500, "response": "Internal server error"}
 
     @staticmethod
     def delete_all():
         try:
             planets.delete_many({})
-            return {"status": 200, "message": "Delete success"}
+            return {"status": 200, "response": "Delete success"}
         except:
-            return {"status": 500, "message": "Internal server error"}
+            return {"status": 500, "response": "Internal server error"}
