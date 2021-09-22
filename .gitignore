@@ -1,2 +1,8 @@
 __pycache__
 .vscode
+/.vscode
+/venv
+/__pycache__
+*/__pycache__
+venv
+/src/config/credentials.json

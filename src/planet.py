@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import Optional
 import requests
 import json
-from db import Db
+from src.db import Db
 
 db = Db()
 planets = db.get_collection()
@@ -67,7 +67,7 @@ class Planet(BaseModel):
         query = {"_id": id}
         try:
             planets.delete_one(query)
-            return {"status": 200, "response": "Delete success"}
+            return {"status": 202, "response": "Delete success"}
         except:
             return {"status": 500, "response": "Internal server error"}
 

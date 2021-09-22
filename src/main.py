@@ -1,4 +1,4 @@
-from planet import Planet
+from src.planet import Planet
 from fastapi import FastAPI
 
 app = FastAPI()

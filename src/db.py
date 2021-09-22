@@ -9,7 +9,7 @@ class Db():
         self.db = self.__get_database()
 
     def __get_credentials(self):
-        with open('./config/credentials.json') as json_file:
+        with open('./src/config/credentials.json') as json_file:
             credentials = json.load(json_file)
         return credentials['mongodb']
 
