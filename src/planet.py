@@ -53,11 +53,11 @@ class Planet(BaseModel):
     def get(id, name):
         query = {}
         if id is not None:
-            query.update({"_id": id})
+            query["_id"] = id
         if name is not None:
-            query.update({"name": name})
+            query["name"] = name
         try:
-            response = [planet for planet in planets.find(query)]
+            response = list(planets.find(query))
             return {"status": 200, "response": response}
         except:
             return {"status": 500, "response": "Internal server error"}
